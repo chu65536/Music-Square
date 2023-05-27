@@ -1,13 +1,16 @@
 PREF=./code/
+CC=g++
+SRC=$(wildcard $(PREF)*.cpp)
+OBJ=$(patsubst $(PREF)%.cpp, %.o, $(SRC))
 
 all: compile link run
 
 compile:
-	g++ -c $(PREF)code.cpp -ID:\code\libs\c++\SFML-2.5.1\include
+	$(CC) -c $(SRC) -ID:\code\libs\c++\SFML-2.5.1\include
 
 link:
-	g++ -LD:\code\libs\c++\SFML-2.5.1\lib code.o -o app.exe -lmingw32 -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system -lsfml-main
+	$(CC) -LD:\code\libs\c++\SFML-2.5.1\lib $(OBJ) -o app.exe -lmingw32 -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system -lsfml-main
 
 run:
+	del -f *.o
 	./app.exe
-	del -f code.o
