@@ -5,13 +5,19 @@
 #include <iostream>
 
 #include "../headers/config.h"
-#include "../headers/sum.h"
+#include "../headers/cube.h"
 
 int main()
 {   
-    sf::RenderWindow window(sf::VideoMode(100, 100), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "SFML works!");
     sf::Clock clock;
     window.setFramerateLimit(60);
+
+    Cube cube;
+    cube.setSpeed(DX, DY);
+    cube.setPosition(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
+    sf::RectangleShape rect(sf::Vector2f(C_SIZE, C_SIZE));
+    rect.setOrigin(C_HSIZE, C_HSIZE);
 
     while (window.isOpen())
     {
@@ -25,11 +31,12 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-
         window.clear();
+
+        cube.Update();
+        rect.setPosition(cube.getX(), cube.getY());
+        window.draw(rect);
+
         window.display();
     }
-
-    std::cout << sum(PI, PI) << '\n';
-    return 0;
 }
