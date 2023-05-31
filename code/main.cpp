@@ -5,64 +5,58 @@
 #include <iostream>
 
 #include "../headers/config.h"
-#include "../headers/cube.h"
+#include "../headers/square.h"
 #include "../headers/sound.h"
-#include "../headers/logic.h"
+#include "../headers/map.h"
 
 int main()
-{   
+{     
+    // window init
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "SFML works!");
     sf::Clock clock;
     window.setFramerateLimit(FPS);
+
+    // notemap {delay, note} (working on midi python parcer)
+    std::vector<std::pair<int, int>> notes = {{1000, 1}, {1000, 3}, {1000, 5}, {1000, 7}};
     
+    // main inits
+    Square square;
+    square.Init();
 
-    Cube cube;
-    cube.setSpeed(DX, DY);
-    cube.setPosition(C_SIZE, WINDOW_HEIGHT / 2);
-    sf::RectangleShape rect(sf::Vector2f(C_SIZE, C_SIZE));
-    rect.setOrigin(C_HSIZE, C_HSIZE);
-
+    Map map;
+    map.Build(square, notes);
     initSound();
 
-    //some melody
-    std::vector<float> notes = 
-    {0.1f, 0.8f, 0.6f, 0.4f, 0.4f, 0.2f, 0.4f, 0.2f, 0.2f,
-    0.8f, 0.6f, 0.4f, 0.4f, 0.2f, 0.4f, 0.2f, 0.2f, 2.f};
-
-    std::vector<sf::RectangleShape> map = getMap(cube.getX(), cube.getY(), notes);
-
-    sf::View view(sf::FloatRect(0.f, 0.f, 400.f, 200.f));
-    view.setCenter(cube.getX(), cube.getY());
+    sf::View view(sf::FloatRect(0.f, 0.f, 800.f, 400.f));
+    // main loop
     while (window.isOpen())
-    {
+    {   
+        // fps
         float current_time = clock.restart().asSeconds();
         float fps = 1.0f / (current_time);
         // std::cout << fps << '\n';
 
+
+        // event manager
         sf::Event event;
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-        window.clear();
+        
+        // logic
+        if (square.getStep() == map.platforms.size())
+            square.setStep(0);
+        square.Update(map.getPlatform(square.getStep()));
+        view.setCenter(square.getX(), square.getY());
         window.setView(view);
 
-        for (int i = 0; i < map.size(); i++){
-            window.draw(map[i]);
-        }
-        for (int i = 0; i < map.size(); i++){
-            sf::Vector2f cube_pos = sf::Vector2f(cube.getX(), cube.getY());
-            sf:: Vector2f platform_pos = map[i].getPosition();
+        // draw
+        window.clear(sf::Color(0, 0, 0));
 
-            if (cube_pos == platform_pos)
-                cube.Collided();
-        }
-        
-        cube.Update();
-        rect.setPosition(cube.getX(), cube.getY());
-        window.draw(rect);
-        view.setCenter(cube.getX(), cube.getY());
+        map.Draw(window);
+        square.Draw(window);
 
         window.display();
     }
