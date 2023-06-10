@@ -11,18 +11,25 @@
 #include "../headers/platform.h"
 
 int main()
-{     
+{    
+    srand(time(0));
+
     // window init
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Music Square");
     sf::Clock clock;
-    window.setFramerateLimit(FPS);
+    window.setFramerateLimit(UPS);
 
     // notemap {delay, note} (working on midi python parcer)
-    std::vector<Platform> platforms;
+    std::vector<std::pair<int, int>> notes;
+    for (int i = 0; i < 100; i++){
+        std::pair<int, int> p;
+        p.first = rand() % 11 * 10 + 150;
+        notes.push_back(p);
+    }
     
     // main inits
     Square square(START_X, START_Y, DX, DY);
-    Map map(START_X, START_Y, platforms);
+    Map map(START_X, START_Y, notes);
     sf::View view(sf::FloatRect(0.f, 0.f, 800.f, 400.f));
     initSound();
 
@@ -42,14 +49,14 @@ int main()
         }
         
         // logic
-        square.Update();
+        square.Update(map);
 
         // view
         view.setCenter(square.x, square.y);
         window.setView(view);
 
         // draw
-        window.clear(sf::Color(0, 0, 0));
+        window.clear(FONT_COLOR);
         map.Draw(window);
         square.Draw(window);
 

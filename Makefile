@@ -1,15 +1,26 @@
-PREF=./code/
-CC=g++
-SRC=$(wildcard $(PREF)*.cpp)
-OBJ=$(patsubst $(PREF)%.cpp, %.o, $(SRC))
+CXX=g++
+CPP_FLAGS=-g -MMD -MP
 
-all: compile link run
+SRC_PREF=./code/
+OBJ_PREF=./obj/
+SRC=$(wildcard $(SRC_PREF)*.cpp)
+OBJ=$(patsubst $(SRC_PREF)%.cpp, $(OBJ_PREF)%.o, $(SRC))
 
-compile:
-	$(CC) -c $(SRC) -ID:\code\libs\c++\SFML-2.5.1\include
+LIBS=-lmingw32 -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system -lsfml-main
+INCLUDE_PATH=D:\code\libs\c++\SFML-2.5.1\include
+LIB_PATH=D:\code\libs\c++\SFML-2.5.1\lib
 
-link:
-	$(CC) -LD:\code\libs\c++\SFML-2.5.1\lib $(OBJ) -o app.exe -lmingw32 -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system -lsfml-main
+TARGET=app.exe
+
+all: $(TARGET) run
+
+$(OBJ_PREF)%.o : $(SRC_PREF)%.cpp
+	$(CXX) -c $(CPP_FLAGS) $< -o $@ -I$(INCLUDE_PATH)
+
+-include $(OBJ:%.o=%.d)
+
+$(TARGET) : $(OBJ)
+	$(CXX) -L$(LIB_PATH) $^ -o $@ $(LIBS)
 
 run:
-	./app.exe
+	$(TARGET)

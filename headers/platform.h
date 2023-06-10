@@ -2,11 +2,10 @@
 
 class Platform{
 public:
-    void setPosition(int x, int y);
-    int getX();
-    int getY();
-    void Draw(sf::RenderWindow& window);;
+    Platform(int x, int y, int dir);
+    void Draw(sf::RenderWindow& window);
 
-private:
     int x, y;
+    int dir;
+    sf::RectangleShape rect;
 };
