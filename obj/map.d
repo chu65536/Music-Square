@@ -74,7 +74,8 @@ obj/map.o: code/map.cpp \
  D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics/Text.hpp \
  D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics/VertexBuffer.hpp \
  code/../headers/config.h code/../headers/map.h \
- code/../headers/../headers/platform.h
+ code/../headers/../headers/platform.h \
+ code/../headers/../headers/square.h
 
 D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics.hpp:
 
@@ -229,3 +230,5 @@ code/../headers/config.h:
 code/../headers/map.h:
 
 code/../headers/../headers/platform.h:
+
+code/../headers/../headers/square.h:

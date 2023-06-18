@@ -12,7 +12,10 @@ LIB_PATH=D:\code\libs\c++\SFML-2.5.1\lib
 
 TARGET=app.exe
 
-all: $(TARGET) run
+all: par $(TARGET) run
+
+par:
+	python parser\midi_parser.py
 
 $(OBJ_PREF)%.o : $(SRC_PREF)%.cpp
 	$(CXX) -c $(CPP_FLAGS) $< -o $@ -I$(INCLUDE_PATH)

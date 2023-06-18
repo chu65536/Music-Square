@@ -91,8 +91,8 @@ obj/main.o: code/main.cpp \
  D:\code\libs\c++\SFML-2.5.1\include/SFML/Audio/SoundFileReader.hpp \
  D:\code\libs\c++\SFML-2.5.1\include/SFML/Audio/SoundFileWriter.hpp \
  code/../headers/config.h code/../headers/square.h \
- code/../headers/../headers/map.h \
- code/../headers/../headers/../headers/platform.h code/../headers/sound.h
+ code/../headers/../headers/platform.h code/../headers/map.h \
+ code/../headers/bgmusic.h
 
 D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics.hpp:
 
@@ -280,8 +280,8 @@ code/../headers/config.h:
 
 code/../headers/square.h:
 
-code/../headers/../headers/map.h:
+code/../headers/../headers/platform.h:
 
-code/../headers/../headers/../headers/platform.h:
+code/../headers/map.h:
 
-code/../headers/sound.h:
+code/../headers/bgmusic.h:

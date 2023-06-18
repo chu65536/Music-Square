@@ -1,17 +1,14 @@
 #pragma once
 
-#include "../headers/map.h"
 #include "../headers/platform.h"
 
 class Square{
 public:
-    Square(int x, int y, int dx, int dy);
-    void setPosition(int x, int y);
-    void Draw(sf::RenderWindow& window);
-    void Collision(Platform platform);
-    void Update(Map& map);
+    Square(float x, float y, float vel_x, float vel_y);
+    void update(float dt);
+    void draw(sf::RenderWindow& window);
 
-    int x, y;
-    int dx, dy;
+    float x, y;
+    float velocity_x, velocity_y;
     sf::RectangleShape rect;
 };

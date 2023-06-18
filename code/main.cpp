@@ -6,39 +6,30 @@
 
 #include "../headers/config.h"
 #include "../headers/square.h"
-#include "../headers/sound.h"
 #include "../headers/map.h"
 #include "../headers/platform.h"
+#include "../headers/bgmusic.h"
 
 int main()
 {    
     srand(time(0));
-
     // window init
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Music Square");
+    window.setFramerateLimit(FPS);
     sf::Clock clock;
-    window.setFramerateLimit(UPS);
 
-    // notemap {delay, note} (working on midi python parcer)
-    std::vector<std::pair<int, int>> notes;
-    for (int i = 0; i < 100; i++){
-        std::pair<int, int> p;
-        p.first = rand() % 11 * 10 + 150;
-        notes.push_back(p);
-    }
-    
     // main inits
-    Square square(START_X, START_Y, DX, DY);
-    Map map(START_X, START_Y, notes);
-    sf::View view(sf::FloatRect(0.f, 0.f, 800.f, 400.f));
-    initSound();
+    Square square(START_X, START_Y, VELOCITY_X, VELOCITY_Y);
+    Map map(square);
+    BGMusic music;
+    sf::View view(sf::Vector2f(0, 0), sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2));
 
     // main loop
+    float prev_time = 0.0f, cur_time = 0.0f;
+    int pt = 0;
     while (window.isOpen())
     {   
-        // fps
-        float current_time = clock.restart().asSeconds();
-        float fps = 1.0f / (current_time);
+        float delta_time = clock.restart().asSeconds();        
 
         // event manager
         sf::Event event;
@@ -46,19 +37,29 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+
+            if (event.key.code == sf::Keyboard::Space)
+                music.play();
         }
         
         // logic
-        square.Update(map);
+        prev_time = cur_time;
+        cur_time = music.getOffset();
+        float delta = cur_time - prev_time;
+        while(pt < map.delays.size() && cur_time >= map.delays[pt]){
+            pt++;
+            square.velocity_y *= -1;
+        }
 
+        square.update(delta);
         // view
-        view.setCenter(square.x, square.y);
-        window.setView(view);
+        // view.setCenter(square.x, square.y);
+        // window.setView(view);
 
         // draw
-        window.clear(FONT_COLOR);
-        map.Draw(window);
-        square.Draw(window);
+        window.clear(sf::Color(WALLS_COLOR));
+
+        square.draw(window);
 
         window.display();
     }

@@ -73,9 +73,8 @@ obj/square.o: code/square.cpp \
  D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics/Sprite.hpp \
  D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics/Text.hpp \
  D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics/VertexBuffer.hpp \
- code/../headers/square.h code/../headers/../headers/map.h \
- code/../headers/../headers/../headers/platform.h \
- code/../headers/config.h code/../headers/sound.h
+ code/../headers/square.h code/../headers/../headers/platform.h \
+ code/../headers/config.h
 
 D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics.hpp:
 
@@ -227,10 +226,6 @@ D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics/VertexBuffer.hpp:
 
 code/../headers/square.h:
 
-code/../headers/../headers/map.h:
-
-code/../headers/../headers/../headers/platform.h:
+code/../headers/../headers/platform.h:
 
 code/../headers/config.h:
-
-code/../headers/sound.h:
