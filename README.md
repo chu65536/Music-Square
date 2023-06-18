@@ -1,1 +1,1 @@
-I've run into a sync issue so for now I'm postponing development of this project until the issue is resolved
+Solved sync issue, keep writing code!
