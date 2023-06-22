@@ -11,6 +11,9 @@ public:
     void build(float x, float y);
     void createBackground();
     void draw(sf::RenderWindow& window);
+
     std::vector<float> delays;
     std::vector<Platform> platforms;
+    int pt;
+
 };

@@ -8,7 +8,7 @@
 
 std::vector<float> getDelays(){
     std::vector<float> delays;
-    std::ifstream f("delays.txt");
+    std::ifstream f("src/delays.txt");
     float val;
     if (f.is_open()){
         while (f >> val)
@@ -27,6 +27,7 @@ Map::Map(Square& square){
     this->delays = getDelays();
     this->build(square.x, square.y);
     this->createBackground();
+    this->pt = 0;
 }
 
 void Map::build(float x, float y){
@@ -47,6 +48,64 @@ void Map::build(float x, float y){
 }
 
 void Map::createBackground(){
+    for (size_t i = 1; i < this->platforms.size(); i++){
+        float x1 = this->platforms[i - 1].x;
+        float y1 = this->platforms[i - 1].y;
+        float x2 = this->platforms[i].x;
+        float y2 = this->platforms[i].y;
+        float x = std::min(x1, x2);
+        float y = std::min(y1, y2);
+
+        float w = x1 - x2;
+        float h = y1 - y2;
+        if (w < 0)
+            w = -w;
+        if (h < 0)
+            h = -h;
+
+        if (platforms[i - 1].dir == 1 || platforms[i - 1].dir == 3){
+            w += SQUARE_SIZE / 2;
+            h += PLATFORM_WIDTH / 2;
+
+            if (x1 < x2)
+                x -= SQUARE_SIZE / 2;
+            if (y1 < y2)
+                y -= PLATFORM_WIDTH / 2;
+        }
+        else{
+            w += PLATFORM_WIDTH / 2;
+            h += SQUARE_SIZE / 2;
+
+            if (x1 < x2)
+                x -= PLATFORM_WIDTH / 2;
+            if (y1 < y2)
+                y -= SQUARE_SIZE / 2;
+        }
+        if (platforms[i].dir == 1 || platforms[i].dir == 3){
+            w += SQUARE_SIZE / 2;
+            h += PLATFORM_WIDTH / 2;
+
+            if (x2 < x1)
+                x -= SQUARE_SIZE / 2;
+            if (y2 < y1)
+                y -= PLATFORM_WIDTH / 2;
+        }
+        else{
+            w += PLATFORM_WIDTH / 2;
+            h += SQUARE_SIZE / 2;
+
+            if (x2 < x1)
+                x -= PLATFORM_WIDTH / 2;
+            if (y2 < y1)
+                y -= SQUARE_SIZE / 2;
+        }
+
+        sf::RectangleShape back = sf::RectangleShape(sf::Vector2f(w, h));
+        back.setPosition(sf::Vector2f(x, y));
+        back.setFillColor(sf::Color(BACKGROUND_COLOR));
+
+        this->background.push_back(back);
+    }
 }
 
 void Map::draw(sf::RenderWindow& window){

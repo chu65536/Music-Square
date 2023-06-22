@@ -6,7 +6,7 @@
 
 std::string getPath(){
     std::string path = "";
-    std::ifstream f("path.txt");
+    std::ifstream f("src/path.txt");
     if (f.is_open()){
         std::getline(f, path);
         path += ".ogg";

@@ -92,7 +92,7 @@ obj/main.o: code/main.cpp \
  D:\code\libs\c++\SFML-2.5.1\include/SFML/Audio/SoundFileWriter.hpp \
  code/../headers/config.h code/../headers/square.h \
  code/../headers/../headers/platform.h code/../headers/map.h \
- code/../headers/bgmusic.h
+ code/../headers/bgmusic.h code/../headers/camera.h
 
 D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics.hpp:
 
@@ -285,3 +285,5 @@ code/../headers/../headers/platform.h:
 code/../headers/map.h:
 
 code/../headers/bgmusic.h:
+
+code/../headers/camera.h:

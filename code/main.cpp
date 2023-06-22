@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <vector>
-#include <cstdlib>
 #include <iostream>
 
 #include "../headers/config.h"
@@ -9,6 +8,7 @@
 #include "../headers/map.h"
 #include "../headers/platform.h"
 #include "../headers/bgmusic.h"
+#include "../headers/camera.h"
 
 int main()
 {    
@@ -22,14 +22,16 @@ int main()
     Square square(START_X, START_Y, VELOCITY_X, VELOCITY_Y);
     Map map(square);
     BGMusic music;
-    sf::View view(sf::Vector2f(0, 0), sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2));
+    Camera camera(START_X, START_Y, CAMERA_WIDTH, CAMERA_HEIGHT, CAMERA_BORDER);
 
     // main loop
-    float prev_time = 0.0f, cur_time = 0.0f;
-    int pt = 0;
+    float delta_time;
+    float time = 0.f;
+    float current_time = 0.f;
+    bool start = false;
     while (window.isOpen())
     {   
-        float delta_time = clock.restart().asSeconds();        
+        delta_time = clock.restart().asSeconds(); 
 
         // event manager
         sf::Event event;
@@ -38,27 +40,33 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
 
-            if (event.key.code == sf::Keyboard::Space)
+            if (event.key.code == sf::Keyboard::Space){
                 music.play();
-        }
-        
-        // logic
-        prev_time = cur_time;
-        cur_time = music.getOffset();
-        float delta = cur_time - prev_time;
-        while(pt < map.delays.size() && cur_time >= map.delays[pt]){
-            pt++;
-            square.velocity_y *= -1;
+                start = true;
+            }
         }
 
-        square.update(delta);
-        // view
-        // view.setCenter(square.x, square.y);
-        // window.setView(view);
+        // logic
+        if (start){
+            time += delta_time;
+            current_time += delta_time;
+        }
+        while (time > map.delays[map.pt]){
+            square.velocity_y *= -1;
+            square.bounce_x = map.platforms[map.pt].x;
+            square.bounce_y = map.platforms[map.pt].y;
+            current_time = time - map.delays[map.pt];
+            map.pt++;
+        }
+
+        square.update(current_time);
+        camera.update(square);
+        window.setView(camera.view);
 
         // draw
         window.clear(sf::Color(WALLS_COLOR));
 
+        map.draw(window);
         square.draw(window);
 
         window.display();

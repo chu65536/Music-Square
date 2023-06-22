@@ -24,7 +24,7 @@ def parse(track):
     output += delays
 
 
-with open('path.txt') as f:
+with open('src/path.txt') as f:
     path = f.readline()
 
 path += '.mid'
@@ -40,7 +40,7 @@ tmp_set = set(output)
 output = (list(tmp_set))
 output.sort()
 
-with open(r'delays.txt', 'w') as fp:
+with open('src/delays.txt', 'w') as fp:
     for item in output:
         fp.write("%s\n" % item)
     print('Map Generated!')
