@@ -32,6 +32,7 @@ int main()
     while (window.isOpen())
     {   
         delta_time = clock.restart().asSeconds(); 
+        std:: cout << "FPS: " << 1.f / delta_time << std::endl;
 
         // event manager
         sf::Event event;
