@@ -36,6 +36,8 @@ BGMusic::BGMusic(){
 void BGMusic::play(){
     if (this->is_loaded && this->music.getStatus() != sf::SoundSource::Playing)
         this->music.play();
+    else
+        this->music.pause();
 }
 
 float BGMusic::getOffset(){

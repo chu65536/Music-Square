@@ -27,6 +27,7 @@ Map::Map(Square& square){
     this->delays = getDelays();
     this->build(square.x, square.y);
     this->createBackground();
+    this->createBGCover();
     this->pt = 0;
 }
 
@@ -103,16 +104,30 @@ void Map::createBackground(){
         sf::RectangleShape back = sf::RectangleShape(sf::Vector2f(w, h));
         back.setPosition(sf::Vector2f(x, y));
         back.setFillColor(sf::Color(BACKGROUND_COLOR));
+        back.setOutlineThickness(WALLS_OUTLINE_THICKNESS);
+        back.setOutlineColor(sf::Color(WALLS_OUTLINE_COLOR));
 
         this->background.push_back(back);
     }
 }
 
+void Map::createBGCover(){
+    for (size_t i = 0; i < this->background.size(); i++){ 
+        sf::RectangleShape cur;
+        cur = background[i];
+        cur.setOutlineThickness(0);
+        this->bg_cover.push_back(cur);
+    }
+}
+
 void Map::draw(sf::RenderWindow& window){
+    for (size_t i = 0; i < this->platforms.size(); i++){
+        window.draw(this->platforms[i].rect);
+    }
     for (size_t i = 0; i < this->background.size(); i++){
         window.draw(this->background[i]);
     }
-    for (size_t i = 0; i < this->platforms.size(); i++){
-        window.draw(this->platforms[i].rect);
+    for (size_t i = 0; i < this->bg_cover.size(); i++){
+        window.draw(this->bg_cover[i]);
     }
 }

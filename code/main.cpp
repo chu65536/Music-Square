@@ -32,7 +32,6 @@ int main()
     while (window.isOpen())
     {   
         delta_time = clock.restart().asSeconds(); 
-        std:: cout << "FPS: " << 1.f / delta_time << std::endl;
 
         // event manager
         sf::Event event;
@@ -41,9 +40,9 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
 
-            if (event.key.code == sf::Keyboard::Space){
+            if (event.key.code == sf::Keyboard::Space && event.type == sf::Event::KeyPressed){
                 music.play();
-                start = true;
+                start = !start;
             }
         }
 
@@ -69,6 +68,7 @@ int main()
 
         map.draw(window);
         square.draw(window);
+        camera.drawFPS(window, delta_time);
 
         window.display();
     }
