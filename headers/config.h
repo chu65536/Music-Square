@@ -6,7 +6,7 @@
 #define CAMERA_WIDTH 400
 #define CAMERA_HEIGHT 400
 #define CAMERA_BORDER 100
-#define OFFSET 0.12f
+#define OFFSET -0.003f
 #define FPS 0
 
 // square

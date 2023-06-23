@@ -26,8 +26,8 @@ int main()
 
     // main loop
     float delta_time;
-    float time = 0.f;
-    float current_time = 0.f;
+    float time, current_time;
+    time = current_time = OFFSET;
     bool start = false;
     while (window.isOpen())
     {   
