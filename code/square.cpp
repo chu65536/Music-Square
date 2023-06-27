@@ -16,12 +16,13 @@ Square::Square(float x, float y, float vel_x, float vel_y)
     this->rect = sf::RectangleShape(sf::Vector2f(SQUARE_SIZE, SQUARE_SIZE));
     this->rect.setFillColor(sf::Color(SQUARE_COLOR));
     this->rect.setOrigin(SQUARE_SIZE / 2, SQUARE_SIZE / 2);
+    this->rect.setPosition(START_X, START_Y);
     this->rect.setOutlineThickness(SQUARE_OUTLINE_THICKNESS);
     this->rect.setOutlineColor(sf::Color(SQUARE_OUTLINE_COLOR));
 }
 void Square::update(float time){
-    this->x = this->bounce_x + this->velocity_x * time;
-    this->y = this->bounce_y + this->velocity_y * time;
+    this->x += this->velocity_x * time;
+    this->y += this->velocity_y * time;
 
     this->rect.setPosition(this->x, this->y);
 }

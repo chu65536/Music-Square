@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <cmath>
 
 #include "../headers/config.h"
 #include "../headers/map.h"
@@ -32,19 +33,29 @@ Map::Map(Square& square){
 }
 
 void Map::build(float x, float y){
-    int dy = 1;
-    float prev = 0.f;
-    for (size_t i = 0; i < this->delays.size(); i++){
-        float cur = delays[i] - prev;
-        prev = delays[i];
-        x += cur * VELOCITY_X;
-        y += cur * VELOCITY_Y * dy;
+    this->platforms.push_back(Platform(x, y, 2, 0));
+    int prev_frame = 0;
 
-        if (dy == 1)
-            this->platforms.push_back(Platform(x, y, 0));
+    int dx = 1, dy = 1;
+    int dir = 0;
+    for (size_t i = 1; i < this->delays.size(); ++i){
+        float f_frame = this->delays[i] * FPS;
+        int cur_frame;
+        if (std::ceil(f_frame) - f_frame < f_frame - std::floor(f_frame))
+            cur_frame = int(f_frame + 1);
         else
-            this->platforms.push_back(Platform(x, y, 2));
+            cur_frame = int(f_frame);
+
+        int delta_frame = cur_frame - prev_frame;
+        prev_frame = cur_frame;
+
+        float frame = 1.f / FPS;
+        x += frame * delta_frame * VELOCITY_X * dx;
+        y += frame * delta_frame * VELOCITY_Y * dy;
+
+        this->platforms.push_back(Platform(x, y, dir, cur_frame));
         dy *= -1;
+        dir = (dir + 2) % 4;
     }
 }
 
@@ -104,8 +115,8 @@ void Map::createBackground(){
         sf::RectangleShape back = sf::RectangleShape(sf::Vector2f(w, h));
         back.setPosition(sf::Vector2f(x, y));
         back.setFillColor(sf::Color(BACKGROUND_COLOR));
-        back.setOutlineThickness(WALLS_OUTLINE_THICKNESS);
-        back.setOutlineColor(sf::Color(WALLS_OUTLINE_COLOR));
+        //back.setOutlineThickness(WALLS_OUTLINE_THICKNESS);
+        //back.setOutlineColor(sf::Color(WALLS_OUTLINE_COLOR));
 
         this->background.push_back(back);
     }
@@ -120,14 +131,13 @@ void Map::createBGCover(){
     }
 }
 
-void Map::draw(sf::RenderWindow& window){
+void Map::drawPlatforms(sf::RenderWindow& window){
     for (size_t i = 0; i < this->platforms.size(); i++){
         window.draw(this->platforms[i].rect);
     }
+}
+void Map::drawBG(sf::RenderWindow& window){
     for (size_t i = 0; i < this->background.size(); i++){
         window.draw(this->background[i]);
-    }
-    for (size_t i = 0; i < this->bg_cover.size(); i++){
-        window.draw(this->bg_cover[i]);
     }
 }

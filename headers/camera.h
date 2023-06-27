@@ -18,7 +18,7 @@ class Camera{
 
 public:
     Camera(float x, float y, float w, float h, float border);
-    void update(Square& square);
+    void update(Square &square);
     void drawFPS(sf::RenderWindow& window, float dt);
 
     sf::View view;

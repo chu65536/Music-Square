@@ -27,12 +27,14 @@ sf::RectangleShape getRect(float x, float y, int dir){
 
     return ret;
 }
-Platform::Platform(float x, float y, int dir){
+Platform::Platform(float x, float y, int dir, int frame){
     this->x = x;
     this->y = y;
     this->dir = dir;
+    this->frame = frame;
 
     this->rect = getRect(x, y, dir);
+    this->rect.setFillColor(sf::Color(PLATFORM_COLOR));
 }
 void Platform::draw(sf::RenderWindow& window){
     window.draw(this->rect);

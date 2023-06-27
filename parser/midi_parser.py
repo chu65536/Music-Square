@@ -12,7 +12,6 @@ def getDelays(track):
             TEMPO = msg.tempo
 
         time += mido.tick2second(msg.time, mid.ticks_per_beat, TEMPO)
-        time = round(time, 3)
         if msg.type == 'note_on':
             delays.append(time)
 

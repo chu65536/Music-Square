@@ -31,6 +31,7 @@ BGMusic::BGMusic(){
     {
         std::cout << error_message << std::endl;
     }
+
 }
 
 void BGMusic::play(){

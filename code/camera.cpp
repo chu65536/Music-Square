@@ -21,7 +21,7 @@ Camera::Camera(float x, float y, float w, float h, float border){
     this->fps_str = "0";
 }
 
-void Camera::update(Square& square){
+void Camera::update(Square &square){
     if (square.x - this->x >this->border)
         this->x += (square.x - this->x) - this->border;
     if (square.x - this->x < -this->border)
@@ -39,7 +39,7 @@ void Camera::drawFPS(sf::RenderWindow& window, float dt){
     this->fps_timer += dt;
     this->fps_counter++;
     if (this->fps_timer > 1.f){
-        this->fps_str = std::to_string(int(std::ceil(fps_counter / fps_timer)));
+        this->fps_str = std::to_string(int(fps_counter / fps_timer));
         this->fps_timer = 0.f;
         this->fps_counter = 0;
     }
