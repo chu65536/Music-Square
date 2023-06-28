@@ -2,12 +2,11 @@
 #include "../headers/camera.h"
 #include <cmath>
 
-Camera::Camera(float x, float y, float w, float h, float border){
+Camera::Camera(float x, float y, float w, float h){
     this->x = x;
     this->y = y;
     this->w = w;
     this->h = h;
-    this->border = border;
 
     this->view = sf::View(sf::Vector2f(x, y), sf::Vector2f(w, h));
 
@@ -22,15 +21,18 @@ Camera::Camera(float x, float y, float w, float h, float border){
 }
 
 void Camera::update(Square &square){
-    if (square.x - this->x >this->border)
-        this->x += (square.x - this->x) - this->border;
-    if (square.x - this->x < -this->border)
-        this->x -= -this->border - (square.x - this->x);
+    float x_border = Config::WINDOW_WIDTH / 2.f * Config::CAMERA_ZOOM * Config::CAMERA_BORDER;
+    float y_border = Config::WINDOW_HEIGHT / 2.f * Config::CAMERA_ZOOM * Config::CAMERA_BORDER;
 
-    if (square.y - this->y > this->border)
-        this->y += (square.y - this->y) - this->border;
-    if (square.y - this->y < -this->border)
-        this->y -= -this->border - (square.y - this->y);
+    if (square.x - this->x > x_border)
+        this->x += (square.x - this->x) - x_border;
+    if (square.x - this->x < -x_border)
+        this->x -= -x_border - (square.x - this->x);
+
+    if (square.y - this->y > y_border)
+        this->y += (square.y - this->y) - y_border;
+    if (square.y - this->y < -y_border)
+        this->y -= -y_border - (square.y - this->y);
 
     this->view.setCenter(this->x, this->y);
 }

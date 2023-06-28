@@ -39,7 +39,7 @@ void Map::build(float x, float y){
     int dx = 1, dy = 1;
     int dir = 0;
     for (size_t i = 1; i < this->delays.size(); ++i){
-        float f_frame = this->delays[i] * FPS;
+        float f_frame = this->delays[i] * Config::FPS;
         int cur_frame;
         if (std::ceil(f_frame) - f_frame < f_frame - std::floor(f_frame))
             cur_frame = int(f_frame + 1);
@@ -49,9 +49,9 @@ void Map::build(float x, float y){
         int delta_frame = cur_frame - prev_frame;
         prev_frame = cur_frame;
 
-        float frame = 1.f / FPS;
-        x += frame * delta_frame * VELOCITY_X * dx;
-        y += frame * delta_frame * VELOCITY_Y * dy;
+        float frame = 1.f / Config::FPS;
+        x += frame * delta_frame * Config::VELOCITY_X * dx;
+        y += frame * delta_frame * Config::VELOCITY_Y * dy;
 
         this->platforms.push_back(Platform(x, y, dir, cur_frame));
         dy *= -1;
@@ -76,59 +76,51 @@ void Map::createBackground(){
             h = -h;
 
         if (platforms[i - 1].dir == 1 || platforms[i - 1].dir == 3){
-            w += SQUARE_SIZE / 2;
-            h += PLATFORM_WIDTH / 2;
+            w += Config::SQUARE_SIZE / 2;
+            h += Config::PLATFORM_WIDTH / 2;
 
             if (x1 < x2)
-                x -= SQUARE_SIZE / 2;
+                x -= Config::SQUARE_SIZE / 2;
             if (y1 < y2)
-                y -= PLATFORM_WIDTH / 2;
+                y -= Config::PLATFORM_WIDTH / 2;
         }
         else{
-            w += PLATFORM_WIDTH / 2;
-            h += SQUARE_SIZE / 2;
+            w += Config::PLATFORM_WIDTH / 2;
+            h += Config::SQUARE_SIZE / 2;
 
             if (x1 < x2)
-                x -= PLATFORM_WIDTH / 2;
+                x -= Config::PLATFORM_WIDTH / 2;
             if (y1 < y2)
-                y -= SQUARE_SIZE / 2;
+                y -= Config::SQUARE_SIZE / 2;
         }
         if (platforms[i].dir == 1 || platforms[i].dir == 3){
-            w += SQUARE_SIZE / 2;
-            h += PLATFORM_WIDTH / 2;
+            w += Config::SQUARE_SIZE / 2;
+            h += Config::PLATFORM_WIDTH / 2;
 
             if (x2 < x1)
-                x -= SQUARE_SIZE / 2;
+                x -= Config::SQUARE_SIZE / 2;
             if (y2 < y1)
-                y -= PLATFORM_WIDTH / 2;
+                y -= Config::PLATFORM_WIDTH / 2;
         }
         else{
-            w += PLATFORM_WIDTH / 2;
-            h += SQUARE_SIZE / 2;
+            w += Config::PLATFORM_WIDTH / 2;
+            h += Config::SQUARE_SIZE / 2;
 
             if (x2 < x1)
-                x -= PLATFORM_WIDTH / 2;
+                x -= Config::PLATFORM_WIDTH / 2;
             if (y2 < y1)
-                y -= SQUARE_SIZE / 2;
+                y -= Config::SQUARE_SIZE / 2;
         }
 
         sf::RectangleShape back = sf::RectangleShape(sf::Vector2f(w, h));
         back.setPosition(sf::Vector2f(x, y));
-        back.setFillColor(sf::Color(BACKGROUND_COLOR));
-        //back.setOutlineThickness(WALLS_OUTLINE_THICKNESS);
-        //back.setOutlineColor(sf::Color(WALLS_OUTLINE_COLOR));
+        back.setFillColor(sf::Color(Config::BACKGROUND_COLOR));
 
         this->background.push_back(back);
     }
 }
 
 void Map::createBGCover(){
-    for (size_t i = 0; i < this->background.size(); i++){ 
-        sf::RectangleShape cur;
-        cur = background[i];
-        cur.setOutlineThickness(0);
-        this->bg_cover.push_back(cur);
-    }
 }
 
 void Map::drawPlatforms(sf::RenderWindow& window){

@@ -1,4 +1,4 @@
-obj/camera.o: code/camera.cpp code/../headers/config.h \
+obj/config.o: code/config.cpp code/../headers/config.h \
  D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics.hpp \
  D:\code\libs\c++\SFML-2.5.1\include/SFML/Window.hpp \
  D:\code\libs\c++\SFML-2.5.1\include/SFML/System.hpp \
@@ -72,8 +72,7 @@ obj/camera.o: code/camera.cpp code/../headers/config.h \
  D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics/Glsl.inl \
  D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics/Sprite.hpp \
  D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics/Text.hpp \
- D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics/VertexBuffer.hpp \
- code/../headers/camera.h code/../headers/../headers/square.h
+ D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics/VertexBuffer.hpp
 
 code/../headers/config.h:
 
@@ -224,7 +223,3 @@ D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics/Sprite.hpp:
 D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics/Text.hpp:
 
 D:\code\libs\c++\SFML-2.5.1\include/SFML/Graphics/VertexBuffer.hpp:
-
-code/../headers/camera.h:
-
-code/../headers/../headers/square.h:

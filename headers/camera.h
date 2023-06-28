@@ -8,7 +8,6 @@ class Camera{
     float y;
     float w;
     float h;
-    float border;
 
     sf::Font font;
     sf::Text fps;
@@ -17,7 +16,7 @@ class Camera{
     std::string fps_str;
 
 public:
-    Camera(float x, float y, float w, float h, float border);
+    Camera(float x, float y, float w, float h);
     void update(Square &square);
     void drawFPS(sf::RenderWindow& window, float dt);
 

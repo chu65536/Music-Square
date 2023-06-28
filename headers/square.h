@@ -8,6 +8,5 @@ public:
 
     float x, y;
     float velocity_x, velocity_y;
-    float bounce_x, bounce_y;
     sf::RectangleShape rect;
 };

@@ -11,23 +11,26 @@
 #include "../headers/camera.h"
 
 int main()
-{    
+{   
     srand(time(0));
+    Config::readConfig();
 
     // maint inits
     BGMusic music;
-    Square square(START_X, START_Y, VELOCITY_X, VELOCITY_Y);
+    Square square(0.f, 0.f, Config::VELOCITY_X, Config::VELOCITY_Y);
     Map map(square); map.pt++;
-    Camera camera(START_X, START_Y, CAMERA_WIDTH, CAMERA_HEIGHT, CAMERA_BORDER);
+    float camera_w = Config::WINDOW_WIDTH * Config::CAMERA_ZOOM;
+    float camera_h = Config::WINDOW_HEIGHT * Config::CAMERA_ZOOM;
+    Camera camera(0.f, 0.f, camera_w, camera_h);
     sf::Clock clock;
 
     // window init
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Music Square");
+    sf::RenderWindow window(sf::VideoMode(Config::WINDOW_WIDTH, Config::WINDOW_HEIGHT), "Music Square");
     window.setVerticalSyncEnabled(true);
 
     // main loop inits
-    float accumulator = OFFSET;
-    float dt = 1.f / FPS;
+    float accumulator = Config::OFFSET;
+    float dt = 1.f / Config::FPS;
     float time = 0.f;
 
     bool start = false;
@@ -87,7 +90,7 @@ int main()
         window.setView(camera.view);
 
         // draw
-        window.clear(sf::Color(WALLS_COLOR));
+        window.clear(sf::Color(Config::WALLS_COLOR));
         
         map.drawPlatforms(window);
         map.drawBG(window);
