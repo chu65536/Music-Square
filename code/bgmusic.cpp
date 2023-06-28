@@ -1,26 +1,36 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <windows.h>
+#include <tchar.h>
 
 #include "../headers/bgmusic.h"
 
-std::string getPath(){
-    std::string path = "";
-    std::ifstream f("src/path.txt");
+std::string BGMusic::initParser(){
+    STARTUPINFO si = {sizeof(STARTUPINFO)};
+    PROCESS_INFORMATION pi;
+    CreateProcess(_T("parser/midi_parser.exe"), NULL, 0, 0, 0, 0, 0, 0, &si, &pi);
+;
+    WaitForSingleObject( pi.hProcess, INFINITE);
+	std::cout << "MIDI successfully parsed!\n";
+
+    std::ifstream f("src/song_name.txt");
+    std::string song;
     if (f.is_open()){
-        std::getline(f, path);
-        path += ".ogg";
+        f >> song;
         f.close();
     }
     else{
-        std::cout << "Path error: cant open music file" << std::endl;
+        std::cout << "Path error: cant find song_name.txt" << std::endl;
     }
 
-    return path;
+    song += ".ogg";
+    return song;
 }
 
 BGMusic::BGMusic(){
-    std::string path = getPath();
+    std::string song = initParser();
+    std::string path = "src/songs/" + song;
     this->is_loaded = 0;
     try{
         if (!this->music.openFromFile(path))

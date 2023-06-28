@@ -14,24 +14,26 @@ int main()
 {    
     srand(time(0));
 
+    // maint inits
+    BGMusic music;
+    Square square(START_X, START_Y, VELOCITY_X, VELOCITY_Y);
+    Map map(square); map.pt++;
+    Camera camera(START_X, START_Y, CAMERA_WIDTH, CAMERA_HEIGHT, CAMERA_BORDER);
+    sf::Clock clock;
+
     // window init
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Music Square");
     window.setVerticalSyncEnabled(true);
-    sf::Clock clock;
 
-    // main inits
-    Square square(START_X, START_Y, VELOCITY_X, VELOCITY_Y);
-    Map map(square); map.pt++;
-    BGMusic music;
-    Camera camera(START_X, START_Y, CAMERA_WIDTH, CAMERA_HEIGHT, CAMERA_BORDER);
-
-
+    // main loop inits
     float accumulator = OFFSET;
     float dt = 1.f / FPS;
     float time = 0.f;
 
     bool start = false;
     int frames = 0;
+
+    // main loop
     while (window.isOpen())
     {      
         // event manager
@@ -66,7 +68,6 @@ int main()
             accumulator += frame_t;
             time += frame_t;
         }
-
         while(accumulator >= dt){
             square.update(dt);
             frames++;

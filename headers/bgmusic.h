@@ -9,4 +9,5 @@ public:
     BGMusic();
     void play();
     float getOffset();
+    std::string initParser();
 };

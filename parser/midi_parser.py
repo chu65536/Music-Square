@@ -1,4 +1,5 @@
 import mido
+import os
 
 TEMPO = 500000
 output = []
@@ -23,10 +24,25 @@ def parse(track):
     output += delays
 
 
-with open('src/path.txt') as f:
-    path = f.readline()
+songs = []
+files = os.listdir('src/songs')
+for f in files:
+    cur = f.removesuffix('.mid')
+    mid = cur + '.mid'
+    ogg = cur + '.ogg'
+    if mid in files and ogg in files:
+        songs.append(cur)
 
-path += '.mid'
+for i, s in enumerate(songs, start=1):
+    print("{}: {}".format(i, s))
+
+index = int(input('Select song number: '))
+song = songs[index - 1]
+
+with open('src/song_name.txt', 'w') as fp:
+    fp.write(song)
+
+path = 'src/songs/' + song + '.mid'
 mid = mido.MidiFile(path)
 time = 0.0
 for i, track in enumerate(mid.tracks):
@@ -38,12 +54,9 @@ for i, track in enumerate(mid.tracks):
 tmp_set = set(output)
 output = (list(tmp_set))
 output.sort()
-
 with open('src/delays.txt', 'w') as fp:
     for item in output:
         fp.write("%s\n" % item)
-    print('Map Generated!')
-
 
 
     
