@@ -8,10 +8,8 @@ class Map{
     std::vector<sf::RectangleShape> background;
     std::vector<sf::RectangleShape> bg_cover;
 public:
-    Map(Square& square);
     void build(float x, float y);
     void createBackground();
-    void createBGCover();
     void drawPlatforms(sf::RenderWindow& window);
     void drawBG(sf::RenderWindow& window);
 

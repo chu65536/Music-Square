@@ -25,7 +25,7 @@ def parse(track):
 
 
 songs = []
-files = os.listdir('src/songs')
+files = os.listdir('resources/songs')
 for f in files:
     cur = f.removesuffix('.mid')
     mid = cur + '.mid'
@@ -39,10 +39,10 @@ for i, s in enumerate(songs, start=1):
 index = int(input('Select song number: '))
 song = songs[index - 1]
 
-with open('src/song_name.txt', 'w') as fp:
+with open('resources/song_name.txt', 'w') as fp:
     fp.write(song)
 
-path = 'src/songs/' + song + '.mid'
+path = 'resources/songs/' + song + '.mid'
 mid = mido.MidiFile(path)
 time = 0.0
 for i, track in enumerate(mid.tracks):
@@ -54,7 +54,7 @@ for i, track in enumerate(mid.tracks):
 tmp_set = set(output)
 output = (list(tmp_set))
 output.sort()
-with open('src/delays.txt', 'w') as fp:
+with open('resources/delays.txt', 'w') as fp:
     for item in output:
         fp.write("%s\n" % item)
 

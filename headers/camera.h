@@ -16,7 +16,7 @@ class Camera{
     std::string fps_str;
 
 public:
-    Camera(float x, float y, float w, float h);
+    Camera(float x = 0.f, float y = 0.f, float w = 1920.f, float h = 1080.f);
     void update(Square &square);
     void drawFPS(sf::RenderWindow& window, float dt);
 

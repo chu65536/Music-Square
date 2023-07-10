@@ -7,10 +7,8 @@ Camera::Camera(float x, float y, float w, float h){
     this->y = y;
     this->w = w;
     this->h = h;
-
     this->view = sf::View(sf::Vector2f(x, y), sf::Vector2f(w, h));
-
-    this->font.loadFromFile("src/fonts/trebuc.ttf");
+    this->font.loadFromFile("resources/fonts/trebuc.ttf");
     this->fps.setFont(this->font);
     this->fps.setCharacterSize(100);
     this->fps.setScale(0.2f, 0.2f);

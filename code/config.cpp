@@ -24,7 +24,7 @@ sf::Color Config::SQUARE_OUTLINE_COLOR = sf::Color(0, 0, 0);
 
 
 void Config::readConfig(){
-    std::ifstream f("src/config.ini");
+    std::ifstream f("resources/config.ini");
 
     std::string param;
     if (f.is_open()){

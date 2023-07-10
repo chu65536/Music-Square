@@ -14,10 +14,10 @@ std::string BGMusic::initParser(){
     WaitForSingleObject( pi.hProcess, INFINITE);
 	std::cout << "MIDI successfully parsed!\n";
 
-    std::ifstream f("src/song_name.txt");
+    std::ifstream f("resources/song_name.txt");
     std::string song;
     if (f.is_open()){
-        f >> song;
+        getline(f, song);
         f.close();
     }
     else{
@@ -30,7 +30,7 @@ std::string BGMusic::initParser(){
 
 BGMusic::BGMusic(){
     std::string song = initParser();
-    std::string path = "src/songs/" + song;
+    std::string path = "resources/songs/" + song;
     this->is_loaded = 0;
     try{
         if (!this->music.openFromFile(path))

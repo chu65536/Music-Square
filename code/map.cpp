@@ -9,7 +9,7 @@
 
 std::vector<float> getDelays(){
     std::vector<float> delays;
-    std::ifstream f("src/delays.txt");
+    std::ifstream f("resources/delays.txt");
     float val;
     if (f.is_open()){
         while (f >> val)
@@ -24,20 +24,13 @@ std::vector<float> getDelays(){
     return delays;
 }
 
-Map::Map(Square& square){
-    this->delays = getDelays();
-    this->build(square.x, square.y);
-    this->createBackground();
-    this->createBGCover();
-    this->pt = 0;
-}
-
 void Map::build(float x, float y){
-    this->platforms.push_back(Platform(x, y, 2, 0));
+    this->delays = getDelays();
+    this->platforms.push_back(Platform(x, y, 0, 0));
     int prev_frame = 0;
 
-    int dx = 1, dy = 1;
-    int dir = 0;
+    int dx = 1, dy = -1;
+    int dir = 2;
     for (size_t i = 1; i < this->delays.size(); ++i){
         float f_frame = this->delays[i] * Config::FPS;
         int cur_frame;
@@ -57,6 +50,8 @@ void Map::build(float x, float y){
         dy *= -1;
         dir = (dir + 2) % 4;
     }
+
+    this->createBackground();
 }
 
 void Map::createBackground(){
@@ -118,9 +113,6 @@ void Map::createBackground(){
 
         this->background.push_back(back);
     }
-}
-
-void Map::createBGCover(){
 }
 
 void Map::drawPlatforms(sf::RenderWindow& window){
