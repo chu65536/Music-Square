@@ -1,1 +1,1 @@
-Solved sync issue, keep writing code!
+[Youtube link](https://youtube.com/shorts/EH4dsbOWf6I)
