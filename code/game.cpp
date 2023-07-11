@@ -50,10 +50,6 @@ float Game::getEllapsedTime(){
 void Game::update(float dt){
     if (this->running){
         while(this->frame == this->map.platforms[map.pt].frame){
-            // std::cout << "x error: \n";
-            // std::cout << this->square.x - this->map.platforms[map.pt].x << '\n';
-            // std::cout << "y error: \n";
-            // std::cout << this->square.y - this->map.platforms[map.pt].y << '\n';
             int dir = this->map.platforms[map.pt].dir;
             this->square.velocity_x *= (dir == 1 || dir == 3 ? -1 : 1);
             this->square.velocity_y *= (dir == 0 || dir == 2 ? -1 : 1);

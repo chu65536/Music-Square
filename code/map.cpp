@@ -24,6 +24,7 @@ std::vector<float> getDelays(){
 }
 
 void Map::build(float x, float y){
+    this->pt = 0;
     this->delays = getDelays();
     
     this->platforms.push_back(Platform(x, y, 0, 0));
@@ -130,7 +131,6 @@ void Map::build(float x, float y){
         std::cout << "Map generated successufully!\n";
     else
         std::cout << "Cannot generate map. Try to config square speed\n";
-
     this->createBackground();
 }
 
