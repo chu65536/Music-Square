@@ -6,7 +6,6 @@
 
 class Map{
     std::vector<sf::RectangleShape> background;
-    std::vector<sf::RectangleShape> bg_cover;
 public:
     void build(float x, float y);
     void createBackground();
