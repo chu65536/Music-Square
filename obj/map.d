@@ -77,7 +77,7 @@ obj/map.o: code/map.cpp \
  D:\code\libs\c++\SFML-2.6.0\include/SFML/Graphics/VertexBuffer.hpp \
  code/../headers/config.h code/../headers/map.h \
  code/../headers/../headers/platform.h \
- code/../headers/../headers/square.h
+ code/../headers/../headers/square.h code/../headers/cute_c2.h
 D:\code\libs\c++\SFML-2.6.0\include/SFML/Graphics.hpp:
 D:\code\libs\c++\SFML-2.6.0\include/SFML/Window.hpp:
 D:\code\libs\c++\SFML-2.6.0\include/SFML/System.hpp:
@@ -158,3 +158,4 @@ code/../headers/config.h:
 code/../headers/map.h:
 code/../headers/../headers/platform.h:
 code/../headers/../headers/square.h:
+code/../headers/cute_c2.h:

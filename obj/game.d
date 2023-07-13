@@ -94,7 +94,7 @@ obj/game.o: code/game.cpp code/../headers/game.h \
  D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundFileReader.hpp \
  D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundFileWriter.hpp \
  code/../headers/../headers/square.h code/../headers/../headers/map.h \
- code/../headers/../headers/../headers/platform.h \
+ D:/repos/Music-Square/headers/platform.h \
  code/../headers/../headers/camera.h code/../headers/config.h
 code/../headers/game.h:
 D:\code\libs\c++\SFML-2.6.0\include/SFML/Graphics.hpp:
@@ -193,6 +193,6 @@ D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundFileReader.hpp:
 D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundFileWriter.hpp:
 code/../headers/../headers/square.h:
 code/../headers/../headers/map.h:
-code/../headers/../headers/../headers/platform.h:
+D:/repos/Music-Square/headers/platform.h:
 code/../headers/../headers/camera.h:
 code/../headers/config.h:

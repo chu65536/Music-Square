@@ -1,3 +1,5 @@
+#define CUTE_C2_IMPLEMENTATION
+
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
@@ -6,6 +8,9 @@
 
 #include "../headers/config.h"
 #include "../headers/map.h"
+#include "../headers/cute_c2.h"
+
+std::vector<int> blocks;
 
 std::vector<float> getDelays(){
     std::vector<float> delays;
@@ -20,9 +25,52 @@ std::vector<float> getDelays(){
     else{
         std::cout << "Path error: cant open delays file" << std::endl;
     }
+
+    float time = 0.f;
+    int block = 0;
+    float block_length = Config::SQUARE_SIZE * 5 / std::min(Config::VELOCITY_X, Config::VELOCITY_Y);
+    blocks.push_back(0);
+    for (int i = 1; i < delays.size(); i++){
+        time += delays[i] - delays[i - 1];
+        blocks.push_back(block);
+        if (time > block_length){
+            time = 0.0;
+            block++;
+        }
+    }
+    blocks.push_back(block);
     return delays;
 }
 
+c2Poly getDanger(float x1, float y1, float x2, float y2){
+    float ext = Config::SQUARE_SIZE * 1.5f;
+    c2Poly ret;
+    ret.count = 4;
+    
+    if (x1 < x2){
+        ret.verts[0] = c2V(x1 - ext, y1);
+        ret.verts[2] = c2V(x2 + ext, y2);
+    }
+    else{
+        ret.verts[0] = c2V(x2 - ext, y2);
+        ret.verts[2] = c2V(x1 + ext, y1); 
+    }
+    if(y1 < y2){
+        ret.verts[1] = c2V(x1, y1 - ext);
+        ret.verts[3] = c2V(x2, y2 + ext);
+    }
+    else{
+        ret.verts[1] = c2V(x2, y2 - ext);
+        ret.verts[3] = c2V(x1, y1 + ext);   
+    }
+    
+    return ret;
+}
+
+
+// this code is dogshit
+// ...
+// but who cares when it works???
 void Map::build(float x, float y){
     this->pt = 0;
     this->delays = getDelays();
@@ -33,7 +81,7 @@ void Map::build(float x, float y){
     float frame = 1.f / Config::FPS;
     std::vector<std::vector<int>> dirs(this->delays.size() + 1, std::vector<int>(2));
     dirs[1] = {1, 2};
-    std::vector<sf::RectangleShape> dangers;
+    std::vector<c2Poly> dangers;
     std::vector<std::pair<int, int>> dxdy(this->delays.size() + 1);
     dxdy[0] = {1, 1};
 
@@ -62,59 +110,57 @@ void Map::build(float x, float y){
 
 
         bool ok = true;
-        int sz = dangers.size();
-        float ext = Config::SQUARE_SIZE * 1.5f;
-        for (int j = 0; j < sz - 1; j++){
-            float danger_x1 = dangers[j].getPosition().x - ext;
-            float danger_x2 = danger_x1 + dangers[j].getSize().x + ext;
-            float danger_y1 = dangers[j].getPosition().y - ext;
-            float danger_y2 = danger_y1 + dangers[j].getSize().y + ext;
-            if ((danger_x1 < cur_x && cur_x < danger_x2) && (danger_y1 < cur_y && cur_y < danger_y2)){
+        float dang_x = this->platforms[i - 1].x;
+        float dang_y = this->platforms[i - 1].y;
+        c2Poly danger = getDanger(dang_x, dang_y, cur_x, cur_y);
+        for (int j = 0; j < int(dangers.size()); j++){
+            if (abs(blocks[j] - blocks[i]) < 3)
+                continue;
+            c2Circle point;
+            point.p = c2V(cur_x, cur_y);
+            point.r = Config::SQUARE_SIZE;
+
+            if (c2CircletoPoly(point, &dangers[j], NULL)){
                 ok = false;
-                break;
             }
         }
+        for (int j = 0; j < int(this->platforms.size()); j++){
+            if (abs(blocks[j] - blocks[i]) < 3)
+                continue;
+            c2Circle point;
+            point.p = c2V(this->platforms[j].x, this->platforms[j].y);
+            point.r = Config::SQUARE_SIZE;
 
-        float tmp_w = abs(cur_x - this->platforms[i - 1].x);
-        float tmp_h = abs(cur_y - this->platforms[i - 1].y);
-        float tmp_x1 = std::min(cur_x, this->platforms[i - 1].x) - ext;
-        float tmp_y1 = std::min(cur_y, this->platforms[i - 1].y) - ext;;
-        float tmp_x2 = tmp_x1 + tmp_w + ext * 2;
-        float tmp_y2 = tmp_y1 + tmp_h + ext * 2;
-        for (int j = 0; j < int(this->platforms.size()) - 1; j++){
-            float plat_x = this->platforms[j].x;
-            float plat_y = this->platforms[j].y;
-
-            if ((tmp_x1 < plat_x && plat_x < tmp_x2) && (tmp_y1 < plat_y && plat_y < tmp_y2)){
-                ok = false;
-                break;
+            if (c2CircletoPoly(point, &danger, NULL)){
+                ok = false; 
             }
         }
 
         if (ok && !dirs[i].empty()){
             int pt = rand() % dirs[i].size();
             int dir = dirs[i][pt];
-            dirs[i].erase(dirs[i].begin() + pt);
-            float danger_w = abs(cur_x - this->platforms[i - 1].x);
-            float danger_h = abs(cur_y - this->platforms[i - 1].y);
-            float danger_x = std::min(cur_x, this->platforms[i - 1].x);
-            float danger_y = std::min(cur_y, this->platforms[i - 1].y);
-            sf::RectangleShape danger(sf::Vector2f(danger_w, danger_h));
-            danger.setPosition(danger_x, danger_y);
+            dirs[i].erase(dirs[i].begin() + pt); 
             dangers.push_back(danger);
             dxdy[i] = {dx, dy};
 
             dx *= (dir == 1 || dir == 3 ? -1 : 1);
             dy *= (dir == 0 || dir == 2 ? -1 : 1);
             std::vector<int> new_dirs;
-            if (dx > 0 && dy > 0)
-                new_dirs = {0, 1};
-            if (dx > 0 && dy < 0)
-                new_dirs = {1, 2};
-            if (dx < 0 && dy > 0)
-                new_dirs = {0, 3};
-            if (dx < 0 && dy < 0)
-                new_dirs = {2, 3};
+            if (blocks[i] != blocks[i + 1]){
+                if (dx > 0 && dy > 0)
+                    new_dirs = {0, 1};
+                if (dx > 0 && dy < 0)
+                    new_dirs = {1, 2};
+                if (dx < 0 && dy > 0)
+                    new_dirs = {0, 3};
+                if (dx < 0 && dy < 0)
+                    new_dirs = {2, 3};
+            }
+            else{
+                int tmp_dir = (dir + 2) % 4;
+                new_dirs = {tmp_dir};
+            }
+
             i++;
             dirs[i] = new_dirs;
 
@@ -127,10 +173,7 @@ void Map::build(float x, float y){
         }
     }
 
-    if (this->platforms.size() == this->delays.size())
-        std::cout << "Map generated successufully!\n";
-    else
-        std::cout << "Cannot generate map. Try to config square speed\n";
+    std::cout << "Done!\n";
     this->createBackground();
 }
 

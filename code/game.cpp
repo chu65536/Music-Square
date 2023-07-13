@@ -55,8 +55,10 @@ void Game::update(float dt){
             this->square.velocity_y *= (dir == 0 || dir == 2 ? -1 : 1);
             this->map.pt++;
         }
-        this->frame++;
-        this->square.update(dt);
+        if (this->map.pt < this->map.delays.size()){
+            this->frame++;
+            this->square.update(dt);
+        }
     }
     this->camera.update(this->square);
 }
