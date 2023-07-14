@@ -10,8 +10,6 @@
 #include "../headers/map.h"
 #include "../headers/cute_c2.h"
 
-std::vector<int> blocks;
-
 std::vector<float> getDelays(){
     std::vector<float> delays;
     std::ifstream f("resources/delays.txt");
@@ -26,24 +24,11 @@ std::vector<float> getDelays(){
         std::cout << "Path error: cant open delays file" << std::endl;
     }
 
-    float time = 0.f;
-    int block = 0;
-    float block_length = Config::SQUARE_SIZE * 5 / std::min(Config::VELOCITY_X, Config::VELOCITY_Y);
-    blocks.push_back(0);
-    for (int i = 1; i < delays.size(); i++){
-        time += delays[i] - delays[i - 1];
-        blocks.push_back(block);
-        if (time > block_length){
-            time = 0.0;
-            block++;
-        }
-    }
-    blocks.push_back(block);
     return delays;
 }
 
 c2Poly getDanger(float x1, float y1, float x2, float y2){
-    float ext = Config::SQUARE_SIZE * 1.5f;
+    float ext = Config::SQUARE_SIZE;
     c2Poly ret;
     ret.count = 4;
     
@@ -67,10 +52,41 @@ c2Poly getDanger(float x1, float y1, float x2, float y2){
     return ret;
 }
 
+c2Poly getPlat(float x, float y, int dir){
+    c2Poly ret;
+    ret.count = 4;
+    
+    float square_sz = Config::SQUARE_SIZE;
+    float plat_width = Config::PLATFORM_WIDTH;
+    float plat_height = Config::PLATFORM_HEIGHT;
+    if (dir == 0){
+        ret.verts[0] = c2V(x - plat_width / 2, y + square_sz / 2);
+        ret.verts[1] = c2V(x + plat_width / 2, y + square_sz / 2);
+        ret.verts[2] = c2V(x + plat_width / 2, y + square_sz / 2 + plat_height);
+        ret.verts[3] = c2V(x - plat_width / 2, y + square_sz / 2 + plat_height);
+    }
+    if (dir == 1){
+        ret.verts[0] = c2V(x + square_sz / 2, y + plat_width / 2);
+        ret.verts[1] = c2V(x + square_sz / 2, y - plat_width / 2);
+        ret.verts[2] = c2V(x + square_sz / 2 + plat_height, y - plat_width / 2);
+        ret.verts[3] = c2V(x + square_sz / 2 + plat_height, y + plat_width / 2);
+    }
+    if (dir == 2){
+        ret.verts[0] = c2V(x + plat_width / 2, y - square_sz / 2);
+        ret.verts[1] = c2V(x - plat_width / 2, y - square_sz / 2);
+        ret.verts[2] = c2V(x - plat_width / 2, y - square_sz / 2 - plat_height);
+        ret.verts[3] = c2V(x + plat_width / 2, y - square_sz / 2 - plat_height);
+    }
+    if (dir == 3){
+        ret.verts[0] = c2V(x - square_sz / 2, y - plat_width / 2);
+        ret.verts[1] = c2V(x - square_sz / 2, y + plat_width / 2);
+        ret.verts[2] = c2V(x - square_sz / 2 - plat_height, y + plat_width / 2);
+        ret.verts[3] = c2V(x - square_sz / 2 - plat_height, y - plat_width / 2);
+    }
+    return ret;
+}
 
-// this code is dogshit
-// ...
-// but who cares when it works???
+
 void Map::build(float x, float y){
     this->pt = 0;
     this->delays = getDelays();
@@ -87,6 +103,16 @@ void Map::build(float x, float y){
 
 
     while(this->platforms.size() != this->delays.size()){
+        if (i == 0){
+            std::cout << "Error: cannot generate map. Unavoidable collisions\nTry to config square speed\n";
+            break;
+        }
+        if (dirs[i].size() == 0){
+            this->platforms.pop_back();
+            dangers.pop_back();
+            i--;
+            continue;    
+        }
         std::cout << "Map generation: " << float(i) / this->delays.size() * 100 << '\n';
         float f_frame = this->delays[i] * Config::FPS;
         int cur_frame;
@@ -108,68 +134,49 @@ void Map::build(float x, float y){
         cur_x += frame * delta_frame * Config::VELOCITY_X * dx;
         cur_y += frame * delta_frame * Config::VELOCITY_Y * dy;
 
+        int pt = rand() % dirs[i].size();
+        int dir = dirs[i][pt];
+        dirs[i].erase(dirs[i].begin() + pt); 
 
         bool ok = true;
         float dang_x = this->platforms[i - 1].x;
         float dang_y = this->platforms[i - 1].y;
         c2Poly danger = getDanger(dang_x, dang_y, cur_x, cur_y);
-        for (int j = 0; j < int(dangers.size()); j++){
-            if (abs(blocks[j] - blocks[i]) < 3)
-                continue;
-            c2Circle point;
-            point.p = c2V(cur_x, cur_y);
-            point.r = Config::SQUARE_SIZE;
-
-            if (c2CircletoPoly(point, &dangers[j], NULL)){
+        for (int j = 0; j < int(dangers.size()) - 1; j++){
+            c2Poly plat = getPlat(cur_x, cur_y, dir);
+            if (c2PolytoPoly(&plat, NULL, &dangers[j], NULL)){
                 ok = false;
+                break;
             }
         }
-        for (int j = 0; j < int(this->platforms.size()); j++){
-            if (abs(blocks[j] - blocks[i]) < 3)
-                continue;
-            c2Circle point;
-            point.p = c2V(this->platforms[j].x, this->platforms[j].y);
-            point.r = Config::SQUARE_SIZE;
-
-            if (c2CircletoPoly(point, &danger, NULL)){
+        for (int j = 0; j < int(this->platforms.size()) - 1; j++){
+            c2Poly plat = getPlat(this->platforms[j].x, this->platforms[j].y, this->platforms[j].dir);
+            if (c2PolytoPoly(&plat, NULL, &danger, NULL)){
                 ok = false; 
+                break;
             }
         }
 
-        if (ok && !dirs[i].empty()){
-            int pt = rand() % dirs[i].size();
-            int dir = dirs[i][pt];
-            dirs[i].erase(dirs[i].begin() + pt); 
+        if (ok){
             dangers.push_back(danger);
             dxdy[i] = {dx, dy};
 
             dx *= (dir == 1 || dir == 3 ? -1 : 1);
             dy *= (dir == 0 || dir == 2 ? -1 : 1);
             std::vector<int> new_dirs;
-            if (blocks[i] != blocks[i + 1]){
-                if (dx > 0 && dy > 0)
-                    new_dirs = {0, 1};
-                if (dx > 0 && dy < 0)
-                    new_dirs = {1, 2};
-                if (dx < 0 && dy > 0)
-                    new_dirs = {0, 3};
-                if (dx < 0 && dy < 0)
-                    new_dirs = {2, 3};
-            }
-            else{
-                int tmp_dir = (dir + 2) % 4;
-                new_dirs = {tmp_dir};
-            }
+            if (dx > 0 && dy > 0)
+                new_dirs = {0, 1};
+            if (dx > 0 && dy < 0)
+                new_dirs = {1, 2};
+            if (dx < 0 && dy > 0)
+                new_dirs = {0, 3};
+            if (dx < 0 && dy < 0)
+                new_dirs = {2, 3};
 
             i++;
             dirs[i] = new_dirs;
 
             this->platforms.push_back(Platform(cur_x, cur_y, dir, cur_frame));
-        }
-        else{
-            this->platforms.pop_back();
-            dangers.pop_back();
-            i--;
         }
     }
 

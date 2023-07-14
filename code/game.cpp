@@ -3,6 +3,11 @@
 #include "../headers/game.h"
 #include "../headers/config.h"
 
+int pt = 1;
+int r = 255;
+int g = 0;
+int b = 0;
+
 Game::Game(){
     Config::readConfig();
     this->square = Square(0.f, 0.f, Config::VELOCITY_X, Config::VELOCITY_Y);
@@ -65,7 +70,6 @@ void Game::update(float dt){
 
 void Game::draw(){
     this->window.setView(this->camera.view);
-
     this->window.clear(Config::WALLS_COLOR);
     this->map.drawBG(this->window);
     this->map.drawPlatforms(this->window);
