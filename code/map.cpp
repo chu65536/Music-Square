@@ -24,6 +24,14 @@ std::vector<float> getDelays(){
         std::cout << "Path error: cant open delays file" << std::endl;
     }
 
+    int pt = 1;
+    while(pt < delays.size()){
+        float dif = delays[pt] - delays[pt-1];
+        if (abs(dif) < 0.05f)
+            delays.erase(delays.begin() + (pt - 1));
+        else
+            pt++;
+    }
     return delays;
 }
 
@@ -104,7 +112,7 @@ void Map::build(float x, float y){
 
     while(this->platforms.size() != this->delays.size()){
         if (i == 0){
-            std::cout << "Error: cannot generate map. Unavoidable collisions\nTry to config square speed\n";
+            std::cout << "Error: cannot generate map. Unavoidable collisions\nTry to change configs\n";
             break;
         }
         if (dirs[i].size() == 0){

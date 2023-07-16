@@ -10,13 +10,14 @@ public:
     static float VELOCITY_X;
     static float VELOCITY_Y;
     static float CAMERA_ZOOM;
-    static float CAMERA_BORDER;
+    static float CAMERA_SPEED;
     static float OFFSET;
     static float FPS;
     static float SQUARE_SIZE;
     static float PLATFORM_WIDTH;
     static float PLATFORM_HEIGHT;
     static float SQUARE_OUTLINE_THICKNESS;
+    static bool FULLSCREEN;
 
     static sf::Color SQUARE_COLOR;
     static sf::Color PLATFORM_COLOR;

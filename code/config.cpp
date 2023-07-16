@@ -8,13 +8,14 @@ float Config::WINDOW_HEIGHT = 800.f;
 float Config::VELOCITY_X = 200.f;
 float Config::VELOCITY_Y = 200.f;
 float Config::CAMERA_ZOOM = 0.5f;
-float Config::CAMERA_BORDER = 0.3f;
+float Config::CAMERA_SPEED = 3.f;
 float Config::OFFSET = -0.12f;
-float Config::FPS = 240.f;
+float Config::FPS = 60.f;
 float Config::SQUARE_SIZE = 20.f;
 float Config::PLATFORM_WIDTH = Config::SQUARE_SIZE;
 float Config::PLATFORM_HEIGHT = Config::SQUARE_SIZE / 2;
 float Config::SQUARE_OUTLINE_THICKNESS = -2;
+bool Config::FULLSCREEN = 0; 
 sf::Color Config::SQUARE_COLOR = sf::Color(255, 0, 0);
 sf::Color Config::PLATFORM_COLOR = sf::Color(0, 0, 0);
 sf::Color Config::WALLS_COLOR = sf::Color(0, 0, 0);
@@ -48,8 +49,8 @@ void Config::readConfig(){
             else if (param == "CAMERA_ZOOM"){
                 Config::CAMERA_ZOOM = num;
             }
-            else if (param == "CAMERA_BORDER"){
-                Config::CAMERA_BORDER = num;
+            else if (param == "CAMERA_SPEED"){
+                Config::CAMERA_SPEED = num;
             }
             else if (param == "OFFSET"){
                 Config::OFFSET = num;
@@ -93,6 +94,9 @@ void Config::readConfig(){
             }
             else if (param == "SQUARE_OUTLINE_THICKNESS"){
                 Config::SQUARE_OUTLINE_THICKNESS = num;
+            }
+            else if (param == "FULLSCREEN"){
+                Config::FULLSCREEN = bool(num);
             }
             else{
                 std::cout << "Error: " << param << " - wrong config parameter" << std::endl;

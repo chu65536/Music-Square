@@ -20,7 +20,7 @@ int main()
             game.handleEvents(event);
         }
         
-        float frame_t = game.getEllapsedTime();
+        float frame_t = game.getFrameTime();
         accumulator += frame_t;
         while(accumulator >= dt){
             game.update(dt);

@@ -1,4 +1,4 @@
-obj/main.o: code/main.cpp code/../headers/game.h \
+obj/progressbar.o: code/progressbar.cpp code/../headers/progressbar.h \
  D:\code\libs\c++\SFML-2.6.0\include/SFML/Graphics.hpp \
  D:\code\libs\c++\SFML-2.6.0\include/SFML/Window.hpp \
  D:\code\libs\c++\SFML-2.6.0\include/SFML/System.hpp \
@@ -75,29 +75,9 @@ obj/main.o: code/main.cpp code/../headers/game.h \
  D:\code\libs\c++\SFML-2.6.0\include/SFML/Graphics/Sprite.hpp \
  D:\code\libs\c++\SFML-2.6.0\include/SFML/Graphics/Text.hpp \
  D:\code\libs\c++\SFML-2.6.0\include/SFML/Graphics/VertexBuffer.hpp \
- code/../headers/../headers/bgmusic.h \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio.hpp \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/InputSoundFile.hpp \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/Export.hpp \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/Listener.hpp \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/Music.hpp \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundStream.hpp \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundSource.hpp \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/AlResource.hpp \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/OutputSoundFile.hpp \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/Sound.hpp \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundBuffer.hpp \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundBufferRecorder.hpp \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundRecorder.hpp \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundFileFactory.hpp \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundFileFactory.inl \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundFileReader.hpp \
- D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundFileWriter.hpp \
- code/../headers/../headers/square.h code/../headers/../headers/map.h \
- D:/repos/Music-Square/headers/platform.h \
  code/../headers/../headers/camera.h \
- code/../headers/../headers/progressbar.h code/../headers/config.h
-code/../headers/game.h:
+ D:/repos/Music-Square/headers/square.h code/../headers/config.h
+code/../headers/progressbar.h:
 D:\code\libs\c++\SFML-2.6.0\include/SFML/Graphics.hpp:
 D:\code\libs\c++\SFML-2.6.0\include/SFML/Window.hpp:
 D:\code\libs\c++\SFML-2.6.0\include/SFML/System.hpp:
@@ -174,27 +154,6 @@ D:\code\libs\c++\SFML-2.6.0\include/SFML/Graphics/Glsl.inl:
 D:\code\libs\c++\SFML-2.6.0\include/SFML/Graphics/Sprite.hpp:
 D:\code\libs\c++\SFML-2.6.0\include/SFML/Graphics/Text.hpp:
 D:\code\libs\c++\SFML-2.6.0\include/SFML/Graphics/VertexBuffer.hpp:
-code/../headers/../headers/bgmusic.h:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio.hpp:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/InputSoundFile.hpp:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/Export.hpp:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/Listener.hpp:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/Music.hpp:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundStream.hpp:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundSource.hpp:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/AlResource.hpp:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/OutputSoundFile.hpp:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/Sound.hpp:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundBuffer.hpp:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundBufferRecorder.hpp:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundRecorder.hpp:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundFileFactory.hpp:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundFileFactory.inl:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundFileReader.hpp:
-D:\code\libs\c++\SFML-2.6.0\include/SFML/Audio/SoundFileWriter.hpp:
-code/../headers/../headers/square.h:
-code/../headers/../headers/map.h:
-D:/repos/Music-Square/headers/platform.h:
 code/../headers/../headers/camera.h:
-code/../headers/../headers/progressbar.h:
+D:/repos/Music-Square/headers/square.h:
 code/../headers/config.h:

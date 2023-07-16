@@ -3,11 +3,6 @@
 #include "../headers/game.h"
 #include "../headers/config.h"
 
-int pt = 1;
-int r = 255;
-int g = 0;
-int b = 0;
-
 Game::Game(){
     Config::readConfig();
     this->square = Square(0.f, 0.f, Config::VELOCITY_X, Config::VELOCITY_Y);
@@ -15,11 +10,16 @@ Game::Game(){
     float camera_w = Config::WINDOW_WIDTH * Config::CAMERA_ZOOM;
     float camera_h = Config::WINDOW_HEIGHT * Config::CAMERA_ZOOM;
     this->camera = Camera(0.f, 0.f, camera_w, camera_h);
-    this->window.create(sf::VideoMode(Config::WINDOW_WIDTH, Config::WINDOW_HEIGHT), "Music Square");
+    if (Config::FULLSCREEN)
+        this->window.create(sf::VideoMode(Config::WINDOW_WIDTH, Config::WINDOW_HEIGHT), "Music Square", sf::Style::Fullscreen);
+    else
+        this->window.create(sf::VideoMode(Config::WINDOW_WIDTH, Config::WINDOW_HEIGHT), "Music Square");
     this->window.setVerticalSyncEnabled(true);
 
+    this->progress_bar = ProgressBar(this->camera, this->map.delays[map.delays.size() - 1]);
     this->running = false;
     this->frame = 0;
+    this->ellapsed_time = 0.f;
 }
 
 void Game::playMusic(){
@@ -48,7 +48,7 @@ void Game::handleEvents(sf::Event event){
     }
 }
 
-float Game::getEllapsedTime(){
+float Game::getFrameTime(){
     return this->clock.restart().asSeconds();
 }
 
@@ -60,12 +60,16 @@ void Game::update(float dt){
             this->square.velocity_y *= (dir == 0 || dir == 2 ? -1 : 1);
             this->map.pt++;
         }
+        ellapsed_time += dt;
         if (this->map.pt < this->map.delays.size()){
             this->frame++;
             this->square.update(dt);
         }
+        else
+            this->running = false;
     }
-    this->camera.update(this->square);
+    this->camera.update(this->square, dt);
+    this->progress_bar.update(ellapsed_time);
 }
 
 void Game::draw(){
@@ -74,5 +78,6 @@ void Game::draw(){
     this->map.drawBG(this->window);
     this->map.drawPlatforms(this->window);
     this->square.draw(this->window);
+    this->window.draw(progress_bar.rect);
     this->window.display();
 }
