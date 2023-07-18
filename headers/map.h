@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
 #include <vector>
 #include "../headers/platform.h"
 #include "../headers/square.h"

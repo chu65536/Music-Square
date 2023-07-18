@@ -24,11 +24,11 @@ std::vector<float> getDelays(){
         std::cout << "Path error: cant open delays file" << std::endl;
     }
 
-    int pt = 1;
-    while(pt < delays.size()){
-        float dif = delays[pt] - delays[pt-1];
+    int pt = 0;
+    while(pt < delays.size() - 1){
+        float dif = delays[pt + 1] - delays[pt];
         if (abs(dif) < 0.05f)
-            delays.erase(delays.begin() + (pt - 1));
+            delays.erase(delays.begin() + (pt + 1));
         else
             pt++;
     }

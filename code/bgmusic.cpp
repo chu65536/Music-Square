@@ -51,6 +51,10 @@ void BGMusic::play(){
         this->music.pause();
 }
 
+void BGMusic::stop(){
+    this->music.stop();
+}
+
 float BGMusic::getOffset(){
     return this->music.getPlayingOffset().asSeconds();
 }

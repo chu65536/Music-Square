@@ -26,10 +26,26 @@ void Game::playMusic(){
     this->music.play();
 }
 
+void Game::restart(){
+    this->music.stop();
+    this->square.x = 0.f;
+    this->square.y = 0.f;
+    this->square.rect.setPosition(0.f, 0.f);
+    this->square.velocity_x = Config::VELOCITY_X;
+    this->square.velocity_y = Config::VELOCITY_Y;
+    this->map.pt = 0;
+    this->frame = 0;
+    this->ellapsed_time = 0.f;
+    this->running = false;
+}
+
 void Game::handleEvents(sf::Event event){
     // window close
     if (event.type == sf::Event::Closed)
         window.close();
+    if (event.key.code == sf::Keyboard::R){
+        this->restart();
+    }
 
     // keyboard
     if (event.type == sf::Event::KeyPressed){
@@ -58,6 +74,7 @@ void Game::update(float dt){
             int dir = this->map.platforms[map.pt].dir;
             this->square.velocity_x *= (dir == 1 || dir == 3 ? -1 : 1);
             this->square.velocity_y *= (dir == 0 || dir == 2 ? -1 : 1);
+            this->square.rect.setFillColor(Config::SQUARE_COLOR);
             this->map.pt++;
         }
         ellapsed_time += dt;
@@ -68,6 +85,7 @@ void Game::update(float dt){
         else
             this->running = false;
     }
+    this->square.shiftColor();
     this->camera.update(this->square, dt);
     this->progress_bar.update(ellapsed_time);
 }
@@ -78,6 +96,6 @@ void Game::draw(){
     this->map.drawBG(this->window);
     this->map.drawPlatforms(this->window);
     this->square.draw(this->window);
-    this->window.draw(progress_bar.rect);
+    this->window.draw(this->progress_bar.rect);
     this->window.display();
 }

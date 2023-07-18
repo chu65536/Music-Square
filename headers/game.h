@@ -26,6 +26,7 @@ public:
     float getFrameTime();
     void update(float dt);
     void draw();
+    void restart();
 
     sf::RenderWindow window;
 };

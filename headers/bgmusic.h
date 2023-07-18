@@ -8,6 +8,7 @@ class BGMusic{
 public:
     BGMusic();
     void play();
+    void stop();
     float getOffset();
     std::string initParser();
 };
