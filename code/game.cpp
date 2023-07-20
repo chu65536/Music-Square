@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "../headers/game.h"
-#include "../headers/config.h"
+#include "../headers/game.hpp"
+#include "../headers/config.hpp"
 
 Game::Game(){
     Config::readConfig();

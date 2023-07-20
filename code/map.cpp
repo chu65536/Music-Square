@@ -6,9 +6,9 @@
 #include <fstream>
 #include <cmath>
 
-#include "../headers/config.h"
-#include "../headers/map.h"
-#include "../headers/cute_c2.h"
+#include "../headers/config.hpp"
+#include "../headers/map.hpp"
+#include "../headers/cute_c2.hpp"
 
 std::vector<float> getDelays(){
     std::vector<float> delays;

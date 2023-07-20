@@ -1,5 +1,5 @@
-#include "../headers/config.h"
-#include "../headers/camera.h"
+#include "../headers/config.hpp"
+#include "../headers/camera.hpp"
 #include <cmath>
 
 float lerp(float a, float b, float f)

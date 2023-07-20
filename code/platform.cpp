@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 
-#include "../headers/platform.h"
-#include "../headers/config.h"
+#include "../headers/platform.hpp"
+#include "../headers/config.hpp"
 
 
 sf::RectangleShape getRect(float x, float y, int dir){

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "../headers/square.h"
+#include "../headers/square.hpp"
 
 class Camera{
 public:

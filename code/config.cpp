@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "../headers/config.h"
+#include "../headers/config.hpp"
 
 //default values
 float Config::WINDOW_WIDTH = 800.f;

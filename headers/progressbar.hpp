@@ -2,8 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "../headers/camera.h"
-#include "../headers/camera.h"
+#include "../headers/camera.hpp"
 
 class ProgressBar{
     float x, y;

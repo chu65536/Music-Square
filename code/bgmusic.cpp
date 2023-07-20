@@ -4,7 +4,7 @@
 #include <windows.h>
 #include <tchar.h>
 
-#include "../headers/bgmusic.h"
+#include "../headers/bgmusic.hpp"
 
 std::string BGMusic::initParser(){
     STARTUPINFO si = {sizeof(STARTUPINFO)};

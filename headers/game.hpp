@@ -2,11 +2,11 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "../headers/bgmusic.h"
-#include "../headers/square.h"
-#include "../headers/map.h"
-#include "../headers/camera.h"
-#include "../headers/progressbar.h"
+#include "../headers/bgmusic.hpp"
+#include "../headers/square.hpp"
+#include "../headers/map.hpp"
+#include "../headers/camera.hpp"
+#include "../headers/progressbar.hpp"
 
 class Game{
     BGMusic music;   

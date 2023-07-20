@@ -1,8 +1,8 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-#include "../headers/square.h"
-#include "../headers/config.h"
+#include "../headers/square.hpp"
+#include "../headers/config.hpp"
 
 Square::Square(float x, float y, float vel_x, float vel_y) 
 {

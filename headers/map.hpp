@@ -2,8 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include "../headers/platform.h"
-#include "../headers/square.h"
+#include "../headers/platform.hpp"
+#include "../headers/square.hpp"
 
 class Map{
     std::vector<sf::RectangleShape> background;
