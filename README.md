@@ -1,6 +1,7 @@
 This is my first completed project in C++ SFML
 
 !!!Works only on Windows!!!
+
 To make your own Music Square map:
 1. Find MIDI file of your song (first note must be at 0.0, desync otherwise)
 2. Convert it to ogg ([Best converter link](https://audio.online-convert.com/convert/midi-to-ogg))
