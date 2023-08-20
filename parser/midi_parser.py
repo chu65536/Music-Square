@@ -3,10 +3,12 @@ import os
 
 TEMPO = 500000
 output = []
+notes = {}
 
 def getDelays(track):
     delays = []
     time = 0.0
+    notenum = 0
     for msg in track:
         if msg.type == 'set_tempo':
             global TEMPO
@@ -14,7 +16,11 @@ def getDelays(track):
 
         time += mido.tick2second(msg.time, mid.ticks_per_beat, TEMPO)
         if msg.type == 'note_on':
-            delays.append(time)
+            global notes
+            if msg.note not in notes:
+                notes[msg.note] = notenum
+                notenum += 1
+            delays.append((time, notes[msg.note]))
 
     return delays
 
@@ -50,13 +56,16 @@ for i, track in enumerate(mid.tracks):
     parse(track)
     print("Track {}: {} - Parsed!".format(i, track.name))
 
-
 tmp_set = set(output)
 output = (list(tmp_set))
 output.sort()
 with open('resources/delays.txt', 'w') as fp:
     for item in output:
-        fp.write("%s\n" % item)
+        fp.write("%s\n" % item[0])
+
+with open('resources/notes.txt', 'w') as fp:
+    for item in output:
+        fp.write("%s\n" % item[1])
 
 
     

@@ -7,13 +7,17 @@
 
 class Map{
     std::vector<sf::RectangleShape> background;
+    std::vector<sf::RectangleShape> backgroundCover;
 public:
-    void build(float x, float y);
+    void build(Square &square);
     void createBackground();
+    void createBackgroundCover();
     void drawPlatforms(sf::RenderWindow& window);
     void drawBG(sf::RenderWindow& window);
+    void drawBGCover(sf::RenderWindow& window);
 
     std::vector<float> delays;
+    std::vector<int> notes;
     std::vector<Platform> platforms;
     int pt;
 

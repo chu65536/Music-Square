@@ -19,6 +19,8 @@ class Game{
     float ellapsed_time;
     bool running;
     int frame;
+
+    std::vector<sf::Color> colors;
 public:
     Game();
     void playMusic();

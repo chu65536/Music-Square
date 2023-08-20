@@ -32,7 +32,30 @@ std::vector<float> getDelays(){
         else
             pt++;
     }
+    float first = delays[0];
+    for (int i = 0; i < delays.size(); i++)
+        delays[i] -= first;
+
+    for (auto i: delays)
+        std::cout << i << '\n';
+    
     return delays;
+}
+
+std::vector<int> getNotes(){
+    std::vector<int> notes;
+    std::ifstream f("resources/notes.txt");
+    int val;
+    if (f.is_open()){
+        while (f >> val)
+            notes.push_back(val);
+
+        f.close();
+    }
+    else{
+        std::cout << "Path error: cant open notes file" << std::endl;
+    }
+    return notes;
 }
 
 c2Poly getDanger(float x1, float y1, float x2, float y2){
@@ -40,21 +63,32 @@ c2Poly getDanger(float x1, float y1, float x2, float y2){
     c2Poly ret;
     ret.count = 4;
     
-    if (x1 < x2){
-        ret.verts[0] = c2V(x1 - ext, y1);
-        ret.verts[2] = c2V(x2 + ext, y2);
+    if (Config::SIMPLE_MODE){
+        if (x1 > x2) std::swap(x1, x2);
+        if (y1 > y2) std::swap(y1, y2);
+
+        ret.verts[0] = c2V(x1 - ext / 2, y1 - ext / 2);
+        ret.verts[1] = c2V(x2 + ext / 2, y1 - ext / 2);
+        ret.verts[2] = c2V(x2 + ext / 2, y2 + ext / 2);
+        ret.verts[3] = c2V(x1 - ext / 2, y2 + ext / 2);
     }
     else{
-        ret.verts[0] = c2V(x2 - ext, y2);
-        ret.verts[2] = c2V(x1 + ext, y1); 
-    }
-    if(y1 < y2){
-        ret.verts[1] = c2V(x1, y1 - ext);
-        ret.verts[3] = c2V(x2, y2 + ext);
-    }
-    else{
-        ret.verts[1] = c2V(x2, y2 - ext);
-        ret.verts[3] = c2V(x1, y1 + ext);   
+        if (x1 < x2){
+            ret.verts[0] = c2V(x1 - ext, y1);
+            ret.verts[2] = c2V(x2 + ext, y2);
+        }
+        else{
+            ret.verts[0] = c2V(x2 - ext, y2);
+            ret.verts[2] = c2V(x1 + ext, y1); 
+        }
+        if(y1 < y2){
+            ret.verts[1] = c2V(x1, y1 - ext);
+            ret.verts[3] = c2V(x2, y2 + ext);
+        }
+        else{
+            ret.verts[1] = c2V(x2, y2 - ext);
+            ret.verts[3] = c2V(x1, y1 + ext);   
+        }
     }
     
     return ret;
@@ -95,48 +129,46 @@ c2Poly getPlat(float x, float y, int dir){
 }
 
 
-void Map::build(float x, float y){
-    this->pt = 0;
-    this->delays = getDelays();
+void Map::build(Square &square){
+    float x = square.x;
+    float y = square.y;
+    pt = 0;
+    delays = getDelays();
+    notes = getNotes();
     
-    this->platforms.push_back(Platform(x, y, 0, 0));
+    platforms.push_back(Platform(x, y, 0, 0));
 
     int i = 1;
     float frame = 1.f / Config::FPS;
-    std::vector<std::vector<int>> dirs(this->delays.size() + 1, std::vector<int>(2));
+    std::vector<std::vector<int>> dirs(delays.size() + 1, std::vector<int>(2));
     dirs[1] = {1, 2};
     std::vector<c2Poly> dangers;
-    std::vector<std::pair<int, int>> dxdy(this->delays.size() + 1);
+    std::vector<std::pair<int, int>> dxdy(delays.size() + 1);
     dxdy[0] = {1, 1};
 
 
-    while(this->platforms.size() != this->delays.size()){
+    while(platforms.size() != delays.size()){
         if (i == 0){
             std::cout << "Error: cannot generate map. Unavoidable collisions\nTry to change configs\n";
             break;
         }
         if (dirs[i].size() == 0){
-            this->platforms.pop_back();
+            platforms.pop_back();
             dangers.pop_back();
             i--;
             continue;    
         }
-        std::cout << "Map generation: " << float(i) / this->delays.size() * 100 << '\n';
-        float f_frame = this->delays[i] * Config::FPS;
-        int cur_frame;
-        if (std::ceil(f_frame) - f_frame < f_frame - std::floor(f_frame))
-            cur_frame = int(f_frame + 1);
-        else
-            cur_frame = int(f_frame);
-
-        int prev_frame = this->platforms[i - 1].frame;
+        std::cout << "Map generation: " << float(i) / delays.size() * 100 << '\n';
+        float f_frame = delays[i] * Config::FPS;
+        int cur_frame = int(f_frame);
+        int prev_frame = platforms[i - 1].frame;
         int delta_frame = cur_frame - prev_frame;
 
-        float cur_x = this->platforms[i - 1].x;
-        float cur_y = this->platforms[i - 1].y;
+        float cur_x = platforms[i - 1].x;
+        float cur_y = platforms[i - 1].y;
         int dx = dxdy[i - 1].first;
         int dy = dxdy[i - 1].second;
-        int prev_dir = this->platforms[i - 1].dir;
+        int prev_dir = platforms[i - 1].dir;
         dx *= (prev_dir == 1 || prev_dir == 3 ? -1 : 1);
         dy *= (prev_dir == 0 || prev_dir == 2 ? -1 : 1);
         cur_x += frame * delta_frame * Config::VELOCITY_X * dx;
@@ -147,8 +179,8 @@ void Map::build(float x, float y){
         dirs[i].erase(dirs[i].begin() + pt); 
 
         bool ok = true;
-        float dang_x = this->platforms[i - 1].x;
-        float dang_y = this->platforms[i - 1].y;
+        float dang_x = platforms[i - 1].x;
+        float dang_y = platforms[i - 1].y;
         c2Poly danger = getDanger(dang_x, dang_y, cur_x, cur_y);
         for (int j = 0; j < int(dangers.size()) - 1; j++){
             c2Poly plat = getPlat(cur_x, cur_y, dir);
@@ -157,8 +189,8 @@ void Map::build(float x, float y){
                 break;
             }
         }
-        for (int j = 0; j < int(this->platforms.size()) - 1; j++){
-            c2Poly plat = getPlat(this->platforms[j].x, this->platforms[j].y, this->platforms[j].dir);
+        for (int j = 0; j < int(platforms.size()) - 1; j++){
+            c2Poly plat = getPlat(platforms[j].x, platforms[j].y, platforms[j].dir);
             if (c2PolytoPoly(&plat, NULL, &danger, NULL)){
                 ok = false; 
                 break;
@@ -180,24 +212,24 @@ void Map::build(float x, float y){
                 new_dirs = {0, 3};
             if (dx < 0 && dy < 0)
                 new_dirs = {2, 3};
-
             i++;
             dirs[i] = new_dirs;
 
-            this->platforms.push_back(Platform(cur_x, cur_y, dir, cur_frame));
+            platforms.push_back(Platform(cur_x, cur_y, dir, cur_frame));
         }
     }
 
     std::cout << "Done!\n";
-    this->createBackground();
+    createBackground();
+    createBackgroundCover();
 }
 
 void Map::createBackground(){
-    for (size_t i = 1; i < this->platforms.size(); i++){
-        float x1 = this->platforms[i - 1].x;
-        float y1 = this->platforms[i - 1].y;
-        float x2 = this->platforms[i].x;
-        float y2 = this->platforms[i].y;
+    for (size_t i = 1; i < platforms.size(); i++){
+        float x1 = platforms[i - 1].x;
+        float y1 = platforms[i - 1].y;
+        float x2 = platforms[i].x;
+        float y2 = platforms[i].y;
         float x = std::min(x1, x2);
         float y = std::min(y1, y2);
 
@@ -248,18 +280,34 @@ void Map::createBackground(){
         sf::RectangleShape back = sf::RectangleShape(sf::Vector2f(w, h));
         back.setPosition(sf::Vector2f(x, y));
         back.setFillColor(sf::Color(Config::BACKGROUND_COLOR));
+        back.setOutlineThickness(Config::WALL_OUTLINE_THICKNESS);
+        back.setOutlineColor(Config::WALL_OUTLINE_COLOR);
 
-        this->background.push_back(back);
+        background.push_back(back);
+    }
+}
+
+void Map::createBackgroundCover(){
+    backgroundCover = background;
+    for (auto &ret: backgroundCover){
+        ret.setOutlineThickness(0);
     }
 }
 
 void Map::drawPlatforms(sf::RenderWindow& window){
-    for (size_t i = 0; i < this->platforms.size(); i++){
-        window.draw(this->platforms[i].rect);
+    for (size_t i = 0; i < platforms.size(); i++){
+        window.draw(platforms[i].rect);
     }
 }
+
 void Map::drawBG(sf::RenderWindow& window){
-    for (size_t i = 0; i < this->background.size(); i++){
-        window.draw(this->background[i]);
+    for (size_t i = 0; i < background.size(); i++){
+        window.draw(background[i]);
+    }
+}
+
+void Map::drawBGCover(sf::RenderWindow& window){
+    for (size_t i = 0; i < backgroundCover.size(); i++){
+        window.draw(backgroundCover[i]);
     }
 }
