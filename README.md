@@ -1,3 +1,5 @@
+This project is not supported anymore
+
 This is my first completed project in C++ SFML
 
 !!! WORKS ONLY ON WINDOWS !!!
